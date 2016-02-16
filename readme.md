@@ -12,8 +12,6 @@ composer require jetfirephp/template
 
 ### Usage
 
-To use the autoloader, first instantiate it, then register it with SPL autoloader stack:
-
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
 
