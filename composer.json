@@ -1,0 +1,27 @@
+{
+    "name": "jetfirephp/template",
+    "type": "library",
+    "description": "JetFire - Abstract template for other template engine",
+    "keywords": ["view", "template"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sumugan Sinnarasa",
+            "email": "mugan27@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "twig/twig": "~2.0@dev"
+    },
+    "suggest": {
+        "twig/twig": "Twig template engine"
+    },
+    "autoload": {
+        "psr-4":{
+            "JetFire\\Template\\": "src/"
+        }
+    },
+    "minimum-stability": "dev"
+}
