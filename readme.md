@@ -10,6 +10,12 @@ Via [composer](https://getcomposer.org)
 composer require jetfirephp/template
 ```
 
+For twig usage
+
+```bash
+composer require twig/twig
+```
+
 ### Usage
 
 ```php
