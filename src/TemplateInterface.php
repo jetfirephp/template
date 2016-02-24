@@ -10,15 +10,15 @@ namespace JetFire\Template;
 interface TemplateInterface {
 
     /**
-     * @param View $view
      * @param array $options
      */
-    public function __construct(View $view,$options = []);
+    public function __construct($options = []);
 
     /**
+     * @param View $view
      * @return mixed
      */
-    public function render();
+    public function render(View $view);
 
     /**
      * @param null $key

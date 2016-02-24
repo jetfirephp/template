@@ -12,10 +12,6 @@ use JetFire\Template\View;
 class PhpTemplate implements TemplateInterface{
 
     /**
-     * @var View
-     */
-    private $view;
-    /**
      * @var array
      */
     private $template = [];
@@ -29,11 +25,9 @@ class PhpTemplate implements TemplateInterface{
     ];
 
     /**
-     * @param View $view
      * @param array $options
      */
-    public function __construct(View $view,$options = []){
-        $this->view = $view;
+    public function __construct($options = []){
         $this->template['engine'] = new PhpTemplateEngine();
         $this->options = array_merge($this->options,$options);
     }
@@ -47,14 +41,15 @@ class PhpTemplate implements TemplateInterface{
     }
 
     /**
+     * @param View $view
      * @return null
      */
-    public function render()
+    public function render(View $view)
     {
-        if(!is_null($this->view->getContent())){
-            return $this->template['engine']->renderContent($this->view->getContent(),$this->view->getData());
-        }elseif(!is_null($this->view->getTemplate())) {
-            return $this->template['engine']->renderTemplate($this->view->getFullPath(),$this->view->getData());
+        if(!is_null($view->getContent())){
+            return $this->template['engine']->renderContent($view->getContent(),$view->getData());
+        }elseif(!is_null($view->getTemplate())) {
+            return $this->template['engine']->renderTemplate($view->getFullPath(),$view->getData());
         }
         return null;
     }

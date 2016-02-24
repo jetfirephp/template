@@ -21,7 +21,13 @@ composer require twig/twig
 ```php
 require_once __DIR__ . '/vendor/autoload.php';
 
-// create your view object
+// Select a template engine to render your view
+// For twig templating
+$template = new \JetFire\Template\Twig\TwigTemplate();
+// For php templating
+// $template = new \JetFire\Template\Php\PhpTemplate();
+
+// and create your view object
 $view = new \JetFire\Template\View();
 
 // set your template options
@@ -37,13 +43,8 @@ $view->setTemplate('index'); // search for index.html.twig
 // or load a content
 $view->setContent('<html><body>Hello Wolrd !</body></html>');
 
-// And select a template engine to render your view
-// For twig templating
-$template = new \JetFire\Template\Twig\TwigTemplate($view);
-// For php templating
-$template = new \JetFire\Template\Php\PhpTemplate($view);
-
-echo $template->render();
+// and render your view via your template engine
+echo $template->render($view);
 
 ```
 

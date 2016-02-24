@@ -20,10 +20,6 @@ class TwigTemplate implements TemplateInterface{
      * @var array
      */
     private $template = [];
-    /**
-     * @var View
-     */
-    private $view;
 
     /**
      * @var array
@@ -35,14 +31,11 @@ class TwigTemplate implements TemplateInterface{
     ];
 
     /**
-     * @param View $view
      * @param array $options
      * @throws \Exception
      */
-    public function __construct(View $view,$options = []){
-        $this->view = $view;
+    public function __construct($options = []){
         $this->options = array_merge($this->options,$options);
-        $this->init();
     }
 
     /**
@@ -55,31 +48,34 @@ class TwigTemplate implements TemplateInterface{
 
 
     /**
+     * @param View $view
      * @return Twig_Loader_Filesystem
      */
-    private function loadTemplate(){
+    private function loadTemplate($view){
         $this->template['response'] = 'template';
-        return new Twig_Loader_Filesystem($this->view->getPath());
+        return new Twig_Loader_Filesystem($view->getPath());
     }
 
     /**
+     * @param View $view
      * @return Twig_Loader_Array
      */
-    private function loadContent(){
+    private function loadContent($view){
         $this->template['response'] = 'content';
         return new Twig_Loader_Array(array(
-            'content' => $this->view->getContent(),
+            'content' => $view->getContent(),
         ));
     }
 
     /**
+     * @param View $view
      * @throws \Exception
      */
-    private function init(){
-        if(!is_null($this->view->getTemplate()))
-            $loader = $this->loadTemplate();
-        elseif(!is_null($this->view->getContent()))
-            $loader = $this->loadContent();
+    private function init($view){
+        if(!is_null($view->getTemplate()))
+            $loader = $this->loadTemplate($view);
+        elseif(!is_null($view->getContent()))
+            $loader = $this->loadContent($view);
         if(isset($loader)) {
             $this->template['loader'] = $loader;
             $this->template['engine'] = new Twig_Environment($loader, array(
@@ -93,15 +89,17 @@ class TwigTemplate implements TemplateInterface{
     }
 
     /**
+     * @param View $view
      * @return null
      */
-    public function render(){
+    public function render(View $view){
+        $this->init($view);
         switch($this->template['response']){
             case 'template':
-                return $this->template['engine']->render($this->view->getTemplate(), $this->view->getData());
+                return $this->template['engine']->render($view->getTemplate(), $view->getData());
                 break;
             case 'content':
-                return $this->template['engine']->render('content', $this->view->getData());
+                return $this->template['engine']->render('content', $view->getData());
                 break;
         }
         return null;

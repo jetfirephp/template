@@ -1,1 +1,4 @@
 /vendor
+index.php
+index.html.twig
+Autoload.php
