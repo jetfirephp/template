@@ -17,9 +17,11 @@ class PhpTemplateEngine {
     public function renderContent($content,$data = []){
         extract($data);
         file_put_contents(__DIR__.'/tmp.php',$content);
+        ob_start();
         require __DIR__.'/tmp.php';
+        $data = ob_get_clean();
         unlink(__DIR__.'/tmp.php');
-        return true;
+        return $data;
     }
 
     /**
@@ -29,7 +31,9 @@ class PhpTemplateEngine {
      */
     public function renderTemplate($template,$data = []){
         extract($data);
-        return require($template);
+        ob_start();
+        require($template);
+        return ob_get_clean();
     }
 
 } 
