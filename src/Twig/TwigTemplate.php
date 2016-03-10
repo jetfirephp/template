@@ -7,6 +7,7 @@ use JetFire\Template\TemplateInterface;
 use JetFire\Template\View;
 use Twig_Environment;
 use Twig_Extension_Debug;
+use Twig_ExtensionInterface;
 use Twig_Loader_Array;
 use Twig_Loader_Filesystem;
 
@@ -103,5 +104,13 @@ class TwigTemplate implements TemplateInterface{
                 break;
         }
         return null;
+    }
+
+    /**
+     * @param $class
+     */
+    public function addExtension($class){
+        if($class instanceof Twig_ExtensionInterface)
+            $this->template['engine']->addExtension($class);
     }
 } 

@@ -54,6 +54,11 @@ class PhpTemplate implements TemplateInterface{
         return null;
     }
 
+    /**
+     * @param $class
+     */
+    public function addExtension($class){
 
+    }
 
 }
