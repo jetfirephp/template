@@ -2,12 +2,16 @@
 
 namespace JetFire\Template\Php;
 
-
 /**
  * Class PhpTemplateEngine
  * @package JetFire\Template\Php
  */
 class PhpTemplateEngine {
+
+    /**
+     * @var array
+     */
+    private $extensions = [];
 
     /**
      * @param $content
@@ -34,6 +38,22 @@ class PhpTemplateEngine {
         ob_start();
         require($template);
         return ob_get_clean();
+    }
+
+    /**
+     * @param array $extension
+     */
+    public function addExtension($extension = []){
+        $this->extensions[] = $extension;
+    }
+
+    /**
+     * @param $name
+     * @param $args
+     * @return mixed
+     */
+    public function __call($name,$args){
+        return call_user_func_array([$this->extensions,$name],$args);
     }
 
 } 

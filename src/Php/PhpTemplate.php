@@ -58,7 +58,8 @@ class PhpTemplate implements TemplateInterface{
      * @param $class
      */
     public function addExtension($class){
-
+        if(method_exists($class,'getFunctions'))
+            $this->addExtension($class->getFunctions());
     }
 
 }
