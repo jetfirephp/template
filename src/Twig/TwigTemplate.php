@@ -6,7 +6,6 @@ namespace JetFire\Template\Twig;
 use JetFire\Template\TemplateInterface;
 use JetFire\Template\View;
 use Twig_Environment;
-use Twig_Extension_Debug;
 use Twig_ExtensionInterface;
 use Twig_Loader_Array;
 use Twig_Loader_Filesystem;
@@ -32,6 +31,13 @@ class TwigTemplate implements TemplateInterface{
     ];
 
     /**
+     * @var array
+     */
+    private $extensions = [
+        'Twig_Extension_Debug'
+    ];
+
+    /**
      * @param array $options
      * @throws \Exception
      */
@@ -44,7 +50,7 @@ class TwigTemplate implements TemplateInterface{
      * @return array
      */
     public function getTemplate($key = null){
-        return is_null($key)?$this->template:$this->template[$key];
+        return (!is_null($key) && isset($this->template[$key]))?$this->template:$this->template[$key];
     }
 
 
@@ -84,7 +90,11 @@ class TwigTemplate implements TemplateInterface{
                 'debug'   => $this->options['debug'],
                 'charset' => $this->options['charset']
             ));
-            $this->template['engine']->addExtension(new Twig_Extension_Debug());
+            foreach($this->extensions as $extension) {
+                (is_callable($extension))
+                    ? $this->template['engine']->addExtension(call_user_func($extension))
+                    : $this->template['engine']->addExtension(new $extension);
+            }
         }else
             throw new \Exception('Loader not found for Twig template');
     }
@@ -111,6 +121,6 @@ class TwigTemplate implements TemplateInterface{
      */
     public function addExtension($class){
         if($class instanceof Twig_ExtensionInterface)
-            $this->template['engine']->addExtension($class);
+            $this->extensions[] = function()use($class){return $class;};
     }
 } 
