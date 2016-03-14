@@ -26,4 +26,10 @@ interface TemplateInterface {
      */
     public function getTemplate($key = null);
 
+    /**
+     * @param $class
+     * @return mixed
+     */
+    public function addExtension($class);
+
 } 

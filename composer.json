@@ -12,10 +12,12 @@
         }
     ],
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=5.4.0",
+        "league/plates": "~3.0@dev"
     },
     "suggest": {
-        "twig/twig": "Twig template engine"
+        "twig/twig": "Twig template engine",
+        "league/plates": "Php template engine"
     },
     "autoload": {
         "psr-4":{

@@ -56,6 +56,7 @@ class PhpTemplate implements TemplateInterface{
 
     /**
      * @param $class
+     * @return mixed|void
      */
     public function addExtension($class){
         if(method_exists($class,'getFunctions'))

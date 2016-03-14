@@ -90,11 +90,6 @@ class TwigTemplate implements TemplateInterface{
                 'debug'   => $this->options['debug'],
                 'charset' => $this->options['charset']
             ));
-            foreach($this->extensions as $extension) {
-                (is_callable($extension))
-                    ? $this->template['engine']->addExtension(call_user_func($extension))
-                    : $this->template['engine']->addExtension(new $extension);
-            }
         }else
             throw new \Exception('Loader not found for Twig template');
     }
@@ -105,6 +100,7 @@ class TwigTemplate implements TemplateInterface{
      */
     public function render(View $view){
         $this->init($view);
+        $this->callExtensions();
         switch($this->template['response']){
             case 'template':
                 return $this->template['engine']->render($view->getTemplate(), $view->getData());
@@ -118,9 +114,21 @@ class TwigTemplate implements TemplateInterface{
 
     /**
      * @param $class
+     * @return mixed|void
      */
     public function addExtension($class){
         if($class instanceof Twig_ExtensionInterface)
             $this->extensions[] = function()use($class){return $class;};
+    }
+
+    /**
+     *
+     */
+    public function callExtensions(){
+        foreach($this->extensions as $extension) {
+            (is_callable($extension))
+                ? $this->template['engine']->addExtension(call_user_func($extension))
+                : $this->template['engine']->addExtension(new $extension);
+        }
     }
 } 
