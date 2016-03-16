@@ -122,7 +122,7 @@ class View{
      */
     public function setData($data = [])
     {
-       $this->data = $data;
+        $this->data = $data;
     }
 
     /**
@@ -131,8 +131,8 @@ class View{
     public function addData()
     {
         $args = func_get_args();
-        (func_num_args() > 1)
+        (func_num_args() == 2)
             ? $this->data[$args[0]] = $args[1]
-            : $this->data[] = $args[0];
+            : $this->data = array_merge($this->data,$args[0]);
     }
 }
