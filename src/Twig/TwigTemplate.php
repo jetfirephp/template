@@ -69,9 +69,11 @@ class TwigTemplate implements TemplateInterface{
      */
     private function loadContent($view){
         $this->template['response'] = 'content';
-        return new Twig_Loader_Array(array(
-            'content' => $view->getContent(),
-        ));
+        return (is_array($view->getContent()))
+            ? new Twig_Loader_Array($view->getContent())
+            : new Twig_Loader_Array(array(
+                'content' => $view->getContent(),
+            ));
     }
 
     /**
