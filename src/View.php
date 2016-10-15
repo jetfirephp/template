@@ -118,6 +118,15 @@ class View{
     }
 
     /**
+     * @param $key
+     * @return bool
+     */
+    public function hasData($key)
+    {
+        return isset($this->data[$key]);
+    }
+
+    /**
      * @param array $data
      */
     public function setData($data = [])
