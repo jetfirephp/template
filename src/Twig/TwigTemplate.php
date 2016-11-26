@@ -50,7 +50,7 @@ class TwigTemplate implements TemplateInterface{
      * @return array
      */
     public function getTemplate($key = null){
-        return (!is_null($key) && isset($this->template[$key]))?$this->template:$this->template[$key];
+        return (!is_null($key) && isset($this->template[$key]))?$this->template[$key]:$this->template;
     }
 
 
