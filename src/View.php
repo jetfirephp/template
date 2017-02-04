@@ -73,7 +73,7 @@ class View{
      */
     public function setTemplate($template)
     {
-        $this->template = ltrim($template,'/');
+        $this->template = is_null($template) ? $template :  ltrim($template,'/');
     }
 
     /**
