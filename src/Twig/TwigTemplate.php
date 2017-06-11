@@ -87,11 +87,7 @@ class TwigTemplate implements TemplateInterface{
             $loader = $this->loadContent($view);
         if(isset($loader)) {
             $this->template['loader'] = $loader;
-            $this->template['engine'] = new Twig_Environment($loader, array(
-                'cache'   => $this->options['cache'],
-                'debug'   => $this->options['debug'],
-                'charset' => $this->options['charset']
-            ));
+            $this->template['engine'] = new Twig_Environment($loader, $this->options);
         }else
             throw new \Exception('Loader not found for Twig template');
     }
