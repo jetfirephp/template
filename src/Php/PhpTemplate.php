@@ -9,7 +9,8 @@ use JetFire\Template\View;
  * Class PhpTemplate
  * @package JetFire\Template\Php
  */
-class PhpTemplate implements TemplateInterface{
+class PhpTemplate implements TemplateInterface
+{
 
     /**
      * @var array
@@ -27,17 +28,19 @@ class PhpTemplate implements TemplateInterface{
     /**
      * @param array $options
      */
-    public function __construct($options = []){
+    public function __construct($options = [])
+    {
         $this->template['engine'] = new PhpTemplateEngine();
-        $this->options = array_merge($this->options,$options);
+        $this->options = array_merge($this->options, $options);
     }
 
     /**
      * @param null $key
      * @return array
      */
-    public function getTemplate($key = null){
-        return is_null($key)?$this->template:$this->template[$key];
+    public function getTemplate($key = null)
+    {
+        return is_null($key) ? $this->template : $this->template[$key];
     }
 
     /**
@@ -46,10 +49,10 @@ class PhpTemplate implements TemplateInterface{
      */
     public function render(View $view)
     {
-        if(!is_null($view->getContent())){
-            return $this->template['engine']->renderContent($view->getContent(),$view->getData());
-        }elseif(!is_null($view->getTemplate())) {
-            return $this->template['engine']->renderTemplate($view->getFullPath(),$view->getData());
+        if (!is_null($view->getContent())) {
+            return $this->template['engine']->renderContent($view->getContent(), $view->getData());
+        } elseif (!is_null($view->getTemplate())) {
+            return $this->template['engine']->renderTemplate($view->getFullPath(), $view->getData());
         }
         return null;
     }
@@ -58,9 +61,11 @@ class PhpTemplate implements TemplateInterface{
      * @param $class
      * @return mixed|void
      */
-    public function addExtension($class){
-        if(method_exists($class,'getFunctions'))
+    public function addExtension($class)
+    {
+        if (method_exists($class, 'getFunctions')) {
             $this->addExtension($class->getFunctions());
+        }
     }
 
 }

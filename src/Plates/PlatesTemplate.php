@@ -7,7 +7,8 @@ use JetFire\Template\View;
 use League\Plates\Engine;
 use League\Plates\Extension\ExtensionInterface;
 
-class PlatesTemplate implements TemplateInterface{
+class PlatesTemplate implements TemplateInterface
+{
 
     /**
      * @var array
@@ -38,7 +39,7 @@ class PlatesTemplate implements TemplateInterface{
     public function render(View $view)
     {
         $this->init($view);
-        return $this->template['engine']->render(str_replace($view->getExtension(),'',$view->getTemplate()), $view->getData());
+        return $this->template['engine']->render(str_replace($view->getExtension(), '', $view->getTemplate()), $view->getData());
     }
 
     /**
@@ -47,25 +48,35 @@ class PlatesTemplate implements TemplateInterface{
      */
     public function getTemplate($key = null)
     {
-        return (!is_null($key) && isset($this->template[$key]))?$this->template:$this->template[$key];
+        return (!is_null($key) && isset($this->template[$key])) ? $this->template : $this->template[$key];
     }
 
     /**
      * @param $class
      * @return mixed|void
      */
-    public function addExtension($class){
-        if($class instanceof ExtensionInterface)
-            $this->extensions[] = function()use($class){return $class;};
+    public function addExtension($class)
+    {
+        if ($class instanceof ExtensionInterface) {
+            $this->extensions[] = function () use ($class) {
+                return $class;
+            };
+        }
     }
 
     /**
      * @param View $view
      * @throws \Exception
      */
-    private function init($view){
-        $this->template['engine'] = new Engine(rtrim($view->getPath(),'/'),ltrim($view->getExtension(),'.'));
-        foreach($this->extensions as $extension)
+    private function init($view)
+    {
+        $this->template['engine'] = new Engine($view->getPath()[0], ltrim($view->getExtension(), '.'));
+        foreach ($view->getPath() as $key => $path) {
+            is_string($key)
+                ? $this->template['engine']->addFolder($key, $path, true)
+                : $this->template['engine']->addFolder('path_' . $key, $path, true);
+        }
+        foreach ($this->extensions as $extension)
             (is_callable($extension))
                 ? $this->template['engine']->loadExtension(call_user_func($extension))
                 : $this->template['engine']->loadExtension(new $extension);

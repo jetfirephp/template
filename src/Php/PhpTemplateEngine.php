@@ -6,7 +6,8 @@ namespace JetFire\Template\Php;
  * Class PhpTemplateEngine
  * @package JetFire\Template\Php
  */
-class PhpTemplateEngine {
+class PhpTemplateEngine
+{
 
     /**
      * @var array
@@ -18,13 +19,14 @@ class PhpTemplateEngine {
      * @param array $data
      * @return bool
      */
-    public function renderContent($content,$data = []){
+    public function renderContent($content, $data = [])
+    {
         extract($data);
-        file_put_contents(__DIR__.'/tmp.php',$content);
+        file_put_contents(__DIR__ . '/tmp.php', $content);
         ob_start();
-        require __DIR__.'/tmp.php';
+        require __DIR__ . '/tmp.php';
         $data = ob_get_clean();
-        unlink(__DIR__.'/tmp.php');
+        unlink(__DIR__ . '/tmp.php');
         return $data;
     }
 
@@ -33,7 +35,8 @@ class PhpTemplateEngine {
      * @param array $data
      * @return mixed
      */
-    public function renderTemplate($template,$data = []){
+    public function renderTemplate($template, $data = [])
+    {
         extract($data);
         ob_start();
         require($template);
@@ -43,7 +46,8 @@ class PhpTemplateEngine {
     /**
      * @param array $extension
      */
-    public function addExtension($extension = []){
+    public function addExtension($extension = [])
+    {
         $this->extensions[] = $extension;
     }
 
@@ -52,8 +56,9 @@ class PhpTemplateEngine {
      * @param $args
      * @return mixed
      */
-    public function __call($name,$args){
-        return call_user_func_array([$this->extensions,$name],$args);
+    public function __call($name, $args)
+    {
+        return call_user_func_array([$this->extensions, $name], $args);
     }
 
 } 

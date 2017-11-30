@@ -14,7 +14,8 @@ use Twig_Loader_Filesystem;
  * Class TwigTemplate
  * @package JetFire\Template\Twig
  */
-class TwigTemplate implements TemplateInterface{
+class TwigTemplate implements TemplateInterface
+{
 
     /**
      * @var array
@@ -41,33 +42,40 @@ class TwigTemplate implements TemplateInterface{
      * @param array $options
      * @throws \Exception
      */
-    public function __construct($options = []){
-        $this->options = array_merge($this->options,$options);
+    public function __construct($options = [])
+    {
+        $this->options = array_merge($this->options, $options);
     }
 
     /**
      * @param null $key
      * @return array
      */
-    public function getTemplate($key = null){
-        return (!is_null($key) && isset($this->template[$key]))?$this->template[$key]:$this->template;
+    public function getTemplate($key = null)
+    {
+        return (!is_null($key) && isset($this->template[$key])) ? $this->template[$key] : $this->template;
     }
-
 
     /**
      * @param View $view
      * @return Twig_Loader_Filesystem
      */
-    private function loadTemplate($view){
+    private function loadTemplate($view)
+    {
         $this->template['response'] = 'template';
-        return new Twig_Loader_Filesystem($view->getPath());
+        $loader  = new Twig_Loader_Filesystem();
+        foreach ($view->getPath() as $key => $path){
+            is_string($key) ? $loader->addPath($path, $key) : $loader->addPath($path);
+        }
+        return $loader;
     }
 
     /**
      * @param View $view
      * @return Twig_Loader_Array
      */
-    private function loadContent($view){
+    private function loadContent($view)
+    {
         $this->template['response'] = 'content';
         return (is_array($view->getContent()))
             ? new Twig_Loader_Array($view->getContent())
@@ -80,26 +88,30 @@ class TwigTemplate implements TemplateInterface{
      * @param View $view
      * @throws \Exception
      */
-    private function init($view){
-        if(!is_null($view->getTemplate()))
+    private function init($view)
+    {
+        if (!is_null($view->getTemplate())) {
             $loader = $this->loadTemplate($view);
-        elseif(!is_null($view->getContent()))
+        } elseif (!is_null($view->getContent())) {
             $loader = $this->loadContent($view);
-        if(isset($loader)) {
+        }
+        if (isset($loader)) {
             $this->template['loader'] = $loader;
             $this->template['engine'] = new Twig_Environment($loader, $this->options);
-        }else
+        } else {
             throw new \Exception('Loader not found for Twig template');
+        }
     }
 
     /**
      * @param View $view
      * @return null
      */
-    public function render(View $view){
+    public function render(View $view)
+    {
         $this->init($view);
         $this->callExtensions();
-        switch($this->template['response']){
+        switch ($this->template['response']) {
             case 'template':
                 return $this->template['engine']->render($view->getTemplate(), $view->getData());
                 break;
@@ -114,16 +126,21 @@ class TwigTemplate implements TemplateInterface{
      * @param $class
      * @return mixed|void
      */
-    public function addExtension($class){
-        if($class instanceof Twig_ExtensionInterface)
-            $this->extensions[] = function()use($class){return $class;};
+    public function addExtension($class)
+    {
+        if ($class instanceof Twig_ExtensionInterface) {
+            $this->extensions[] = function () use ($class) {
+                return $class;
+            };
+        }
     }
 
     /**
      *
      */
-    public function callExtensions(){
-        foreach($this->extensions as $extension) {
+    public function callExtensions()
+    {
+        foreach ($this->extensions as $extension) {
             (is_callable($extension))
                 ? $this->template['engine']->addExtension(call_user_func($extension))
                 : $this->template['engine']->addExtension(new $extension);

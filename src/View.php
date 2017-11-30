@@ -6,14 +6,15 @@ namespace JetFire\Template;
  * Class View
  * @package JetFire\Template
  */
-class View{
+class View
+{
 
     /**
      * @var array
      */
     private $data = [];
     /**
-     * @var
+     * @var array
      */
     private $path;
     /**
@@ -32,16 +33,20 @@ class View{
     /**
      * @return null|string
      */
-    public function getFullPath(){
-        if(is_file($path = $this->path.$this->template.$this->extension))
-            return $path;
-        elseif(is_file($path = $this->path.$this->template))
-            return $path;
+    public function getFullPath()
+    {
+        foreach ($this->getPath() as $dir) {
+            if (is_file($path = $dir . $this->template . $this->extension)) {
+                return $path;
+            } elseif (is_file($path = $dir . $this->template)) {
+                return $path;
+            }
+        }
         return null;
     }
 
     /**
-     * @return mixed
+     * @return array
      */
     public function getPath()
     {
@@ -53,7 +58,17 @@ class View{
      */
     public function setPath($path)
     {
-        $this->path = rtrim($path,'/').'/';
+        $this->path = is_array($path) ? $path : [rtrim($path, '/') . '/'];
+    }
+
+    /**
+     * @param $key
+     * @param $path
+     */
+    public function addPath($key, $path = null)
+    {
+        $path = is_null($path) ? $key : $path;
+        $this->path[$key] = rtrim($path, '/') . '/';
     }
 
     /**
@@ -61,10 +76,13 @@ class View{
      */
     public function getTemplate()
     {
-        if(is_file($this->path.($path = $this->template.$this->extension)))
-            return $path;
-        elseif(is_file($this->path.($path = $this->template)))
-            return $path;
+        foreach ($this->getPath() as $dir) {
+            if (is_file($dir . ($path = $this->template . $this->extension))) {
+                return $path;
+            } elseif (is_file($dir . ($path = $this->template))) {
+                return $path;
+            }
+        }
         return $this->template;
     }
 
@@ -73,7 +91,7 @@ class View{
      */
     public function setTemplate($template)
     {
-        $this->template = is_null($template) ? $template :  ltrim($template,'/');
+        $this->template = is_null($template) ? $template : ltrim($template, '/');
     }
 
     /**
@@ -114,7 +132,7 @@ class View{
      */
     public function getData($key = null)
     {
-        return is_null($key)?$this->data:$this->data[$key];
+        return is_null($key) ? $this->data : $this->data[$key];
     }
 
     /**
@@ -142,6 +160,6 @@ class View{
         $args = func_get_args();
         (func_num_args() == 2)
             ? $this->data[$args[0]] = $args[1]
-            : $this->data = array_merge($this->data,$args[0]);
+            : $this->data = array_merge($this->data, $args[0]);
     }
 }
