@@ -63,7 +63,7 @@ class TwigTemplate implements TemplateInterface
     private function loadTemplate($view)
     {
         $this->template['response'] = 'template';
-        $loader  = new Twig_Loader_Filesystem();
+        $loader = new Twig_Loader_Filesystem(reset($view->getPath()));
         foreach ($view->getPath() as $key => $path){
             is_string($key) ? $loader->addPath($path, $key) : $loader->addPath($path);
         }

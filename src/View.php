@@ -46,11 +46,12 @@ class View
     }
 
     /**
+     * @param null $key
      * @return array
      */
-    public function getPath()
+    public function getPath($key = null)
     {
-        return $this->path;
+        return is_null($key) ? $this->path : $this->path[$key];
     }
 
     /**
