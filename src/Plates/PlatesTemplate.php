@@ -70,9 +70,9 @@ class PlatesTemplate implements TemplateInterface
      */
     private function init($view)
     {
-        $paths = reset($view->getPath());
+        $paths = current($view->getPath());
         $this->template['engine'] = new Engine($paths, ltrim($view->getExtension(), '.'));
-        foreach ($paths as $key => $path) {
+        foreach ($view->getPath() as $key => $path) {
             is_string($key)
                 ? $this->template['engine']->addFolder($key, $path, true)
                 : $this->template['engine']->addFolder('path_' . $key, $path, true);
