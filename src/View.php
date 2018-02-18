@@ -77,7 +77,7 @@ class View
      */
     public function getTemplate()
     {
-        foreach ($this->getPath() as $dir) {
+        foreach ($this->getPath() as $namespace => $dir) {
             if (is_file($dir . ($path = $this->template . $this->extension))) {
                 return $path;
             } elseif (is_file($dir . ($path = $this->template))) {

@@ -59,13 +59,14 @@ class TwigTemplate implements TemplateInterface
     /**
      * @param View $view
      * @return Twig_Loader_Filesystem
+     * @throws \Twig_Error_Loader
      */
     private function loadTemplate($view)
     {
         $this->template['response'] = 'template';
-        $paths = current($view->getPath());
-        $loader = new Twig_Loader_Filesystem($paths);
-        foreach ($view->getPath() as $key => $path){
+        $paths = $view->getPath();
+        $loader  = new Twig_Loader_Filesystem($paths);
+        foreach ($paths as $key => $path){
             is_string($key) ? $loader->addPath($path, $key) : $loader->addPath($path);
         }
         return $loader;
@@ -107,6 +108,7 @@ class TwigTemplate implements TemplateInterface
     /**
      * @param View $view
      * @return null
+     * @throws \Exception
      */
     public function render(View $view)
     {
